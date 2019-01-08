@@ -27,12 +27,11 @@ class MultiplicationServiceHandler : virtual public MultiplicationServiceIf {
 
 int main(int argc, char **argv) {
   int port = 9090;
-  auto handler = std::make_shared<MultiplicationServiceHandler>(); //::apache::thrift::stdcxx::shared_ptr<MultiplicationServiceHandler> handler(new MultiplicationServiceHandler());
-  //::apache::thrift::stdcxx::shared_ptr<MultiplicationServiceHandler> handler(new MultiplicationServiceHandler());
-  ::apache::thrift::stdcxx::shared_ptr<TProcessor> processor(new MultiplicationServiceProcessor(handler));
-  ::apache::thrift::stdcxx::shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
-  ::apache::thrift::stdcxx::shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
-  ::apache::thrift::stdcxx::shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+  auto handler = std::make_shared<MultiplicationServiceHandler>();
+  auto processor = std::shared_ptr<TProcessor>(new MultiplicationServiceProcessor(handler));
+  auto serverTransport = std::shared_ptr<TServerTransport>(new TServerSocket(port));
+  auto transportFactory = std::shared_ptr<TTransportFactory>(new TBufferedTransportFactory());
+  auto protocolFactory = std::shared_ptr<TProtocolFactory>(new TBinaryProtocolFactory());
 
   TSimpleServer server(processor, serverTransport, transportFactory, protocolFactory);
   server.serve();
